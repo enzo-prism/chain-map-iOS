@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+*.log
+/data/last_known_good.json
+/data/ingest_state.json
