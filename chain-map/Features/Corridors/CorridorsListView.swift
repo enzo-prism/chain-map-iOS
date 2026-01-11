@@ -56,7 +56,7 @@ struct CorridorsListView: View {
         .onDisappear {
             viewModel.stopPolling()
         }
-        .onChange(of: scenePhase) { phase in
+        .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 viewModel.startPolling()
             } else {

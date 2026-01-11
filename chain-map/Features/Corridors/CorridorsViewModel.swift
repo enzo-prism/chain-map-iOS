@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 @MainActor
@@ -13,6 +14,7 @@ final class CorridorsViewModel: ObservableObject {
     private static let dateParser = ISO8601DateFormatter()
     private var isRefreshing = false
 
+    @MainActor
     init(client: ChainMapAPIClient = ChainMapAPIClient()) {
         self.client = client
     }
