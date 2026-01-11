@@ -68,10 +68,7 @@ function eventSeverity(event: NormalizedEvent): Severity {
   if (
     event.chainLevel === "R-2" ||
     event.chainLevel === "R-3" ||
-    event.chainLevel === "RC" ||
-    /chains required/.test(text) ||
-    /chain control\s*level\s*R-?2/i.test(text) ||
-    /chain control\s*level\s*R-?3/i.test(text)
+    event.chainLevel === "RC"
   ) {
     return "chains";
   }
@@ -83,6 +80,14 @@ function eventSeverity(event: NormalizedEvent): Severity {
     )
   ) {
     return "caution";
+  }
+
+  if (
+    /chains required/.test(text) ||
+    /chain control\s*level\s*R-?2/i.test(text) ||
+    /chain control\s*level\s*R-?3/i.test(text)
+  ) {
+    return "chains";
   }
 
   if (event.chainLevel === "R-0") {

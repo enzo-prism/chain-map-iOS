@@ -15,8 +15,13 @@ final class CorridorsViewModel: ObservableObject {
     private var isRefreshing = false
 
     @MainActor
-    init(client: ChainMapAPIClient = ChainMapAPIClient()) {
+    init(client: ChainMapAPIClient) {
         self.client = client
+    }
+
+    @MainActor
+    convenience init() {
+        self.init(client: ChainMapAPIClient())
     }
 
     func startPolling() {
