@@ -31,9 +31,9 @@ final class CaltransKMLService {
     private let kmlURL = URL(string: "https://quickmap.dot.ca.gov/data/cc.kml")!
     private let dateFormatter = ISO8601DateFormatter()
 
-    init(session: URLSession = .shared) {
+    init(session: URLSession = .shared, cacheURL: URL? = nil) {
         self.session = session
-        self.cacheURL = CaltransKMLService.defaultCacheURL()
+        self.cacheURL = cacheURL ?? CaltransKMLService.defaultCacheURL()
     }
 
     func fetchSnapshot() async throws -> CorridorResponse {
@@ -51,7 +51,7 @@ final class CaltransKMLService {
         }
 
         let generatedAt = dateFormatter.string(from: Date())
-        let snapshot = try await Task.detached(priority: .utility) {
+        let snapshot = await Task.detached(priority: .utility) {
             let events = Self.parseEvents(from: kml)
             let corridors = Self.summarize(events: events, generatedAt: generatedAt)
             return CorridorResponse(generatedAt: generatedAt, corridors: corridors)
@@ -74,6 +74,8 @@ final class CaltransKMLService {
             return
         }
 
+        let directory = cacheURL.deletingLastPathComponent()
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         try? data.write(to: cacheURL, options: [.atomic])
     }
 

@@ -11,6 +11,7 @@ control and winter road conditions for Tahoe and the Bay Area.
 ## Quick start
 1. iOS app: open `chain-map.xcodeproj` in Xcode and run the app target.
 2. Optional backend: `cd backend && npm install && npm run dev`.
+3. App parsing tests: `swift test`.
 
 ## Documentation
 - App docs live in `chain-map/README.md` and `chain-map/DESIGN.md`.

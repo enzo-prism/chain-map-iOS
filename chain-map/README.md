@@ -25,6 +25,9 @@ Status: early prototype. The UI and data integrations are still being built.
   `https://quickmap.dot.ca.gov/data/cc.kml`
 - Updates run on a 2-5 minute timer and cache the last result on-device.
 
+## Tests
+- Run `swift test` from the repo root to validate KML parsing and caching.
+
 ## Documentation
 - `DESIGN.md` for Liquid Glass UI patterns and visual rules
 - `ARCHITECTURE.md` for data flow and module boundaries
