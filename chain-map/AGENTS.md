@@ -20,6 +20,11 @@ Liquid Glass patterns described in:
 - Avoid over-promising data accuracy. If a source is unknown or delayed,
   explicitly label it.
 - Keep code ASCII-only unless a file already contains Unicode.
+- Treat these references as the gold standard for implementation details:
+  `../AdditionalDocumentation/Foundation-AttributedString-Updates.md`,
+  `../AdditionalDocumentation/FoundationModels-Using-on-device-LLM-in-your-app.md`,
+  `../AdditionalDocumentation/MapKit-GeoToolbox-PlaceDescriptors.md`,
+  `../AdditionalDocumentation/Swift-Concurrency-Updates.md`.
 
 ## Suggested structure (when adding files)
 - `App/`: app entry, scene setup
