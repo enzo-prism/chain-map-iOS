@@ -4,12 +4,11 @@ This document describes the intended architecture for Chain Map as it grows
 beyond the initial prototype.
 
 ## High-level flow
-Data sources -> backend ingestion -> cache -> JSON API -> view models -> SwiftUI views
+Data sources -> on-device parsing -> cache -> view models -> SwiftUI views
 
-## Backend
-The `/backend` service ingests Caltrans QuickMap KML and Nevada 511 JSON,
-normalizes the data, and serves a single API that the iOS app calls. The app
-never fetches DOT sources directly.
+## Backend (optional)
+The `/backend` service can ingest DOT data and expose a JSON API, but the iOS app
+currently fetches Caltrans QuickMap KML directly.
 
 ## Layers
 - UI: SwiftUI views with lightweight view models.

@@ -1,17 +1,17 @@
 import Foundation
 
-struct CorridorResponse: Decodable {
+struct CorridorResponse: Codable {
     let generatedAt: String
     let corridors: [CorridorSummary]
 }
 
-struct CorridorSummary: Decodable, Identifiable {
+struct CorridorSummary: Codable, Identifiable {
     let id: String
     let label: String
     let status: CorridorStatus
 }
 
-struct CorridorStatus: Decodable {
+struct CorridorStatus: Codable {
     let severity: CorridorSeverity
     let headline: String
     let details: [String]
@@ -19,7 +19,7 @@ struct CorridorStatus: Decodable {
     let lastUpdatedAt: String
 }
 
-enum CorridorSeverity: String, Decodable {
+enum CorridorSeverity: String, Codable {
     case ok
     case caution
     case chains

@@ -20,10 +20,10 @@ Status: early prototype. The UI and data integrations are still being built.
 2. Select an iOS simulator or device.
 3. Build and run the app target.
 
-## Backend configuration
-- The app reads `ChainMapAPIBaseURL` from Info.plist.
-- For local development, point it at your backend (for example, `http://localhost:8787`).
-- In Xcode, you can set a build setting and reference it in Info.plist if needed.
+## Data source
+- The app fetches Caltrans QuickMap chain control KML directly:
+  `https://quickmap.dot.ca.gov/data/cc.kml`
+- Updates run on a 2-5 minute timer and cache the last result on-device.
 
 ## Documentation
 - `DESIGN.md` for Liquid Glass UI patterns and visual rules

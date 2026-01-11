@@ -14,18 +14,18 @@ struct CorridorsMapView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             Map(position: $cameraPosition) {
-                ForEach(CorridorMapLocation.all) { location in
-                    Annotation(location.label, coordinate: location.coordinate, anchor: .bottom) {
+                ForEach(CorridorDefinition.all) { corridor in
+                    Annotation(corridor.label, coordinate: corridor.coordinate, anchor: .bottom) {
                         VStack(spacing: 6) {
                             Circle()
-                                .fill(color(for: severity(for: location.id)))
+                                .fill(color(for: severity(for: corridor.id)))
                                 .frame(width: 14, height: 14)
                                 .overlay(
                                     Circle()
                                         .stroke(Color.white.opacity(0.9), lineWidth: 2)
                                 )
 
-                            Text(location.shortLabel)
+                            Text(corridor.shortLabel)
                                 .font(.caption2)
                                 .foregroundStyle(.primary)
                                 .padding(.horizontal, 8)
@@ -115,82 +115,6 @@ struct CorridorsMapView: View {
             return .gray
         }
     }
-}
-
-private struct CorridorMapLocation: Identifiable {
-    let id: String
-    let label: String
-    let shortLabel: String
-    let coordinate: CLLocationCoordinate2D
-
-    static let all: [CorridorMapLocation] = [
-        CorridorMapLocation(
-            id: "i80-donner",
-            label: "I-80 (Donner Summit)",
-            shortLabel: "I-80",
-            coordinate: CLLocationCoordinate2D(latitude: 39.3206, longitude: -120.3327)
-        ),
-        CorridorMapLocation(
-            id: "us50-echo",
-            label: "US-50 (Echo Summit)",
-            shortLabel: "US-50",
-            coordinate: CLLocationCoordinate2D(latitude: 38.8154, longitude: -120.0414)
-        ),
-        CorridorMapLocation(
-            id: "ca88-carson",
-            label: "CA-88 (Carson Pass)",
-            shortLabel: "CA-88",
-            coordinate: CLLocationCoordinate2D(latitude: 38.7056, longitude: -119.9880)
-        ),
-        CorridorMapLocation(
-            id: "ca89-tahoe",
-            label: "CA-89 (Tahoe Basin)",
-            shortLabel: "CA-89",
-            coordinate: CLLocationCoordinate2D(latitude: 38.9619, longitude: -120.0860)
-        ),
-        CorridorMapLocation(
-            id: "ca28-laketahoe",
-            label: "CA-28 (Lake Tahoe)",
-            shortLabel: "CA-28",
-            coordinate: CLLocationCoordinate2D(latitude: 39.1686, longitude: -120.1429)
-        ),
-        CorridorMapLocation(
-            id: "ca267-kings",
-            label: "CA-267 (Truckee to Kings Beach)",
-            shortLabel: "CA-267",
-            coordinate: CLLocationCoordinate2D(latitude: 39.3312, longitude: -120.1701)
-        ),
-        CorridorMapLocation(
-            id: "nv431-mtrose",
-            label: "NV-431 (Mt Rose Hwy)",
-            shortLabel: "NV-431",
-            coordinate: CLLocationCoordinate2D(latitude: 39.3293, longitude: -119.8854)
-        ),
-        CorridorMapLocation(
-            id: "us395-reno",
-            label: "US-395 (Reno/Sierra)",
-            shortLabel: "US-395",
-            coordinate: CLLocationCoordinate2D(latitude: 39.5296, longitude: -119.8138)
-        ),
-        CorridorMapLocation(
-            id: "nv28-laketahoe",
-            label: "NV-28 (Lake Tahoe)",
-            shortLabel: "NV-28",
-            coordinate: CLLocationCoordinate2D(latitude: 39.2405, longitude: -119.9433)
-        ),
-        CorridorMapLocation(
-            id: "nv267-brockway",
-            label: "NV-267 (Brockway Summit)",
-            shortLabel: "NV-267",
-            coordinate: CLLocationCoordinate2D(latitude: 39.3115, longitude: -119.9596)
-        ),
-        CorridorMapLocation(
-            id: "sr207-kingsbury",
-            label: "SR-207 (Kingsbury Grade)",
-            shortLabel: "SR-207",
-            coordinate: CLLocationCoordinate2D(latitude: 38.9341, longitude: -119.8804)
-        )
-    ]
 }
 
 #Preview {

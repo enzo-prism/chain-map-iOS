@@ -1,8 +1,8 @@
 # Chain Map Data Sources
 
-Chain Map uses a backend service to ingest official DOT data sources. The app
-only calls the backend and never hits DOT endpoints directly. This document
-captures the data sources and handling rules.
+Chain Map currently fetches Caltrans QuickMap chain control data directly in the
+iOS app. A backend service still exists in this repo, but the app can run
+without it. This document captures the data sources and handling rules.
 
 ## Principles
 - Prefer official DOT/road agency sources for chain control status.
@@ -11,7 +11,6 @@ captures the data sources and handling rules.
 
 ## Current sources (subject to licensing and availability)
 - Caltrans QuickMap chain control KML: https://quickmap.dot.ca.gov/data/cc.kml
-- Nevada 511 road conditions JSON: https://www.nvroads.com/api/v2/get/roadconditions
 
 ## Future sources
 - Additional advisories and closures where licensing permits.

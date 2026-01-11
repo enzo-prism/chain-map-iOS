@@ -13,7 +13,7 @@ whenever data collection or permissions change.
 - Location is not stored or transmitted outside of required system services.
 
 ## Network
-- The app fetches road condition data from the Chain Map backend.
+- The app fetches Caltrans QuickMap chain control data directly.
 - Responses may be cached locally for performance and offline resilience.
 
 ## Changes
