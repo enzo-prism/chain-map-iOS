@@ -107,10 +107,12 @@ struct CorridorsMapView: View {
 
     private var lastUpdatedText: String {
         guard let date = viewModel.lastUpdatedAt else {
-            return "Last updated: --"
+            return "Updated: --"
         }
 
-        return "Last updated: \(date.formatted(date: .abbreviated, time: .shortened))"
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return "Updated \(formatter.localizedString(for: date, relativeTo: Date()))"
     }
 
     private func severity(for corridorId: String) -> CorridorSeverity {
@@ -171,12 +173,12 @@ private struct AboutDataView: View {
                     Label("About the data", systemImage: AppSymbol.dataSource)
                         .font(.title3.weight(.semibold))
 
-                    Text("Chain Map pulls live chain control data from Caltrans QuickMap. The app fetches the KML feed every few minutes and caches the last result on your device so it can still show something offline.")
+                    Text("Chain Map pulls live chain control and lane closure data from Caltrans CWWP2 feeds. The app refreshes frequently and caches the last result on your device so it can still show something offline.")
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text("How to read the map")
                             .font(.headline)
-                        Text("Colored corridor lines indicate driving safety conditions: green is clear, orange is caution, red means chains required, black means closed. Gray means no recent chain-control data was available for that corridor.")
+                        Text("Colored corridor lines indicate driving safety conditions: green is clear, orange is caution, red means chains required, black means closed. Gray means no recent data was available for that corridor.")
                     }
 
                     VStack(alignment: .leading, spacing: 6) {

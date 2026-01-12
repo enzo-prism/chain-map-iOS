@@ -8,7 +8,7 @@ Data sources -> on-device parsing -> cache -> view models -> SwiftUI views
 
 ## Backend (optional)
 The `/backend` service can ingest DOT data and expose a JSON API, but the iOS app
-currently fetches Caltrans QuickMap KML directly.
+currently fetches Caltrans CWWP2 JSON feeds directly.
 
 ## Layers
 - UI: SwiftUI views with lightweight view models for the map and status list.
@@ -19,7 +19,7 @@ currently fetches Caltrans QuickMap KML directly.
 - `Features/Map`: map rendering, overlays, and status chips.
 - `Features/Details`: bottom sheet with segment details and advisories.
 - `Features/Alerts`: notifications and watchlists (optional).
-- `Services/ChainControlService`: fetch + normalize chain control data.
+- `Services/DotFeedsService`: fetch + normalize Caltrans CWWP2 feeds (chain + closures).
 - `Services/Cache`: short-lived cache with explicit expiry.
 
 ## State management

@@ -3,6 +3,11 @@ import SwiftUI
 struct CorridorsListView: View {
     @ObservedObject var viewModel: CorridorsViewModel
     private static let dateParser = ISO8601DateFormatter()
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter
+    }()
 
     var body: some View {
         NavigationStack {
@@ -81,10 +86,10 @@ struct CorridorsListView: View {
 
     private var lastUpdatedText: String {
         guard let date = viewModel.lastUpdatedAt else {
-            return "Last updated: --"
+            return "Updated: --"
         }
 
-        return "Last updated: \(date.formatted(date: .abbreviated, time: .shortened))"
+        return "Updated \(Self.relativeFormatter.localizedString(for: date, relativeTo: Date()))"
     }
 
     private var keyPathCorridors: [CorridorSummary] {
@@ -150,11 +155,11 @@ struct CorridorsListView: View {
 
     private func updatedText(for corridor: CorridorSummary) -> String {
         if let date = Self.dateParser.date(from: corridor.status.lastUpdatedAt) {
-            return "Updated \(date.formatted(date: .abbreviated, time: .shortened))"
+            return "Updated \(Self.relativeFormatter.localizedString(for: date, relativeTo: Date()))"
         }
 
         if let fallback = viewModel.lastUpdatedAt {
-            return "Updated \(fallback.formatted(date: .abbreviated, time: .shortened))"
+            return "Updated \(Self.relativeFormatter.localizedString(for: fallback, relativeTo: Date()))"
         }
 
         return "Updated: --"
@@ -192,7 +197,7 @@ struct CorridorsListView: View {
 
     private var dataDisclaimer: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Chain Map pulls live chain control data from Caltrans QuickMap. The app fetches the KML feed every few minutes and caches the last result on your device so it can still show something offline.")
+            Text("Chain Map pulls live chain control and lane closure data from Caltrans CWWP2 feeds. The app refreshes frequently and caches the last result on your device so it can still show something offline.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 

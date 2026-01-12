@@ -1,0 +1,27 @@
+{
+  "data": [
+    {
+      "lcs": {
+        "index": "456",
+        "travelFlowDirection": "WB",
+        "beginRoute": "US-50",
+        "beginLatitude": "38.89",
+        "beginLongitude": "-120.04",
+        "beginLocationName": "Echo Summit",
+        "beginNearbyPlace": "South Lake Tahoe",
+        "endRoute": "US-50",
+        "endLatitude": "38.90",
+        "endLongitude": "-120.02",
+        "endLocationName": "Meyers",
+        "endNearbyPlace": "South Lake Tahoe",
+        "typeOfClosure": "Lane closure",
+        "typeOfWork": "Snow removal",
+        "lanesClosed": "1",
+        "totalExistingLanes": "2",
+        "estimatedDelay": "10 minutes",
+        "closureStartEpoch": "1736520000",
+        "closureEndEpoch": "1736523600"
+      }
+    }
+  ]
+}

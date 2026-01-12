@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "cc": {
+        "index": "123",
+        "district": "D03",
+        "locationName": "Donner Summit",
+        "nearbyPlace": "Truckee",
+        "latitude": "39.322",
+        "longitude": "-120.333",
+        "direction": "EB",
+        "county": "Nevada",
+        "route": "I-80",
+        "status": "R-2",
+        "statusDescription": "Chains required for all vehicles except 4WD",
+        "statusDate": "01/10/2026",
+        "statusTime": "14:05"
+      }
+    }
+  ]
+}

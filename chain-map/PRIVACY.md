@@ -13,7 +13,7 @@ whenever data collection or permissions change.
 - Location is not stored or transmitted outside of required system services.
 
 ## Network
-- The app fetches Caltrans QuickMap chain control data directly.
+- The app fetches Caltrans CWWP2 chain control and lane closure data directly.
 - Responses may be cached locally for performance and offline resilience.
 
 ## Changes

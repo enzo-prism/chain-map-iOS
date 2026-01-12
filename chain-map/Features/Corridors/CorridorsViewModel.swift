@@ -1,6 +1,14 @@
 import Combine
 import Foundation
 
+protocol CorridorSnapshotService {
+    func fetchSnapshot() async throws -> CorridorResponse
+    func loadCachedSnapshot() -> CorridorResponse?
+}
+
+extension CaltransKMLService: CorridorSnapshotService {}
+extension DotFeedsService: CorridorSnapshotService {}
+
 @MainActor
 final class CorridorsViewModel: ObservableObject {
     @Published var corridors: [CorridorSummary] = []
@@ -8,21 +16,27 @@ final class CorridorsViewModel: ObservableObject {
     @Published var isStale = false
     @Published var lastErrorMessage: String?
 
-    private let service: CaltransKMLService
+    private let service: CorridorSnapshotService
     private var timer: Timer?
-    private let refreshInterval: TimeInterval = 180
+    private let refreshInterval: TimeInterval = 60
     private static let dateParser = ISO8601DateFormatter()
     private var isRefreshing = false
     private var hasLoadedCache = false
+    private let staleThreshold: TimeInterval = 600
 
     @MainActor
-    init(service: CaltransKMLService) {
+    init(service: CorridorSnapshotService) {
         self.service = service
     }
 
     @MainActor
     convenience init() {
-        self.init(service: CaltransKMLService())
+        let configuration = LiveDataConfiguration.fromBundle()
+        if configuration.useDotFeedsDirectly {
+            self.init(service: DotFeedsService(nevadaProxyBaseURL: configuration.nevadaProxyBaseURL))
+        } else {
+            self.init(service: CaltransKMLService())
+        }
     }
 
     func startPolling() {
@@ -68,8 +82,17 @@ final class CorridorsViewModel: ObservableObject {
 
     private func apply(snapshot: CorridorResponse, isStale: Bool) {
         corridors = snapshot.corridors
-        lastUpdatedAt = Self.dateParser.date(from: snapshot.generatedAt)
-        self.isStale = isStale
+        let corridorDates = snapshot.corridors.compactMap { Self.dateParser.date(from: $0.status.lastUpdatedAt) }
+        let generatedAt = Self.dateParser.date(from: snapshot.generatedAt)
+        let latest = corridorDates.max() ?? generatedAt
+        lastUpdatedAt = latest
+
+        if let latest {
+            let age = Date().timeIntervalSince(latest)
+            self.isStale = isStale || age > staleThreshold
+        } else {
+            self.isStale = true
+        }
         lastErrorMessage = nil
     }
 }
