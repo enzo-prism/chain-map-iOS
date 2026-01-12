@@ -1,0 +1,10 @@
+{
+  "daily": {
+    "time": ["2026-01-10"],
+    "snowfall_sum": [5.0]
+  },
+  "daily_units": {
+    "snowfall_sum": "cm"
+  },
+  "timezone": "America/Los_Angeles"
+}

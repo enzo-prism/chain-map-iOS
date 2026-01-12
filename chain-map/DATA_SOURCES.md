@@ -15,6 +15,7 @@ captures the data sources and handling rules.
 - Caltrans CWWP2 lane closures (D03): https://cwwp2.dot.ca.gov/data/d3/lcs/lcsStatusD03.json
 - Caltrans CWWP2 lane closures (D10): https://cwwp2.dot.ca.gov/data/d10/lcs/lcsStatusD10.json
 - Optional Nevada 511 proxy (configurable): https://<proxy>/roadconditions, https://<proxy>/events
+- Open-Meteo snowfall history (no key): https://api.open-meteo.com/v1/forecast
 
 ## Future sources
 - Additional advisories and closures where licensing permits.

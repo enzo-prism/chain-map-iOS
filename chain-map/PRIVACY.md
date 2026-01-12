@@ -14,6 +14,7 @@ whenever data collection or permissions change.
 
 ## Network
 - The app fetches Caltrans CWWP2 chain control and lane closure data directly.
+- The app fetches Open-Meteo snowfall history data directly.
 - Responses may be cached locally for performance and offline resilience.
 
 ## Changes

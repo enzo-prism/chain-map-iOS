@@ -39,7 +39,12 @@ let package = Package(
                 "Services/LiveData/CaltransCWWP2Client.swift",
                 "Services/LiveData/LiveDataUtilities.swift",
                 "Services/LiveData/Nevada511Client.swift",
-                "Services/LiveData/DotFeedsService.swift"
+                "Services/LiveData/DotFeedsService.swift",
+                "Sources/Weather/SnowfallPoints.swift",
+                "Sources/Weather/SnowfallModels.swift",
+                "Sources/Weather/OpenMeteoSnowfallClient.swift",
+                "Sources/Weather/SnowfallService.swift",
+                "Sources/Weather/SnowfallConfiguration.swift"
             ]
         ),
         .testTarget(

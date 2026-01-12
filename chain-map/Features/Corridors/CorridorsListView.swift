@@ -46,6 +46,22 @@ struct CorridorsListView: View {
                     }
                 }
 
+                if viewModel.isSnowfallEnabled {
+                    Section {
+                        ForEach(viewModel.availableSnowfallPoints) { point in
+                            SnowfallCardView(
+                                point: point,
+                                history: viewModel.snowfallHistory(for: point.id),
+                                formatter: Self.relativeFormatter,
+                                formatInches: viewModel.formatInches
+                            )
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        }
+                    } header: {
+                        Text("Snowfall (Last 7 Days)")
+                    }
+                }
+
                 if !keyPathCorridors.isEmpty {
                     Section {
                         ForEach(keyPathCorridors) { corridor in
@@ -146,6 +162,12 @@ struct CorridorsListView: View {
                 }
             }
 
+            if let snowfallSummary = viewModel.snowfallSummaryText(for: corridor.id) {
+                Text(snowfallSummary)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
             Label(updatedText(for: corridor), systemImage: AppSymbol.lastUpdated)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -206,6 +228,91 @@ struct CorridorsListView: View {
                 .foregroundStyle(.secondary)
         }
         .padding(.vertical, 4)
+    }
+}
+
+private struct SnowfallCardView: View {
+    let point: SnowfallPoint
+    let history: SnowfallHistory?
+    let formatter: RelativeDateTimeFormatter
+    let formatInches: (Double) -> String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(point.name)
+                .font(.headline)
+
+            if let history, !history.days.isEmpty {
+                Text("Total: \(formatInches(history.total7DaysInches)) in")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                SnowfallBars(days: history.days)
+
+                HStack(spacing: 8) {
+                    Label(updatedText(for: history), systemImage: AppSymbol.lastUpdated)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+
+                    if history.isStale {
+                        Label("Stale", systemImage: AppSymbol.stale)
+                            .font(.caption2)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.orange.opacity(0.15))
+                            .foregroundStyle(Color.orange)
+                            .clipShape(Capsule())
+                    }
+                }
+
+                Text("Estimated snowfall (model). Source: Open-Meteo.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Snowfall data unavailable.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(12)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+
+    private func updatedText(for history: SnowfallHistory) -> String {
+        "Updated \(formatter.localizedString(for: history.updatedAt, relativeTo: Date()))"
+    }
+}
+
+private struct SnowfallBars: View {
+    let days: [SnowfallDay]
+
+    var body: some View {
+        let maxValue = days.map(\.snowfallInches).max() ?? 0
+        let maxHeight: CGFloat = 36
+
+        HStack(alignment: .bottom, spacing: 6) {
+            ForEach(days) { day in
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(Color.blue.opacity(0.6))
+                    .frame(width: 8, height: barHeight(for: day, maxValue: maxValue, maxHeight: maxHeight))
+                    .accessibilityLabel(dayAccessibilityLabel(day))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func barHeight(for day: SnowfallDay, maxValue: Double, maxHeight: CGFloat) -> CGFloat {
+        guard maxValue > 0 else { return 4 }
+        let ratio = day.snowfallInches / maxValue
+        return max(4, maxHeight * CGFloat(ratio))
+    }
+
+    private func dayAccessibilityLabel(_ day: SnowfallDay) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        let dateText = formatter.string(from: day.date)
+        return "\(dateText), \(day.snowfallInches) inches"
     }
 }
 

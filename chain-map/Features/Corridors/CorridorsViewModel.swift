@@ -15,8 +15,11 @@ final class CorridorsViewModel: ObservableObject {
     @Published var lastUpdatedAt: Date?
     @Published var isStale = false
     @Published var lastErrorMessage: String?
+    @Published var snowfallByPointId: [String: SnowfallHistory] = [:]
 
     private let service: CorridorSnapshotService
+    private let snowfallService: SnowfallService?
+    private let snowfallPoints: [SnowfallPoint]
     private var timer: Timer?
     private let refreshInterval: TimeInterval = 60
     private static let dateParser = ISO8601DateFormatter()
@@ -25,17 +28,31 @@ final class CorridorsViewModel: ObservableObject {
     private let staleThreshold: TimeInterval = 600
 
     @MainActor
-    init(service: CorridorSnapshotService) {
+    init(service: CorridorSnapshotService, snowfallService: SnowfallService?, snowfallPoints: [SnowfallPoint]) {
         self.service = service
+        self.snowfallService = snowfallService
+        self.snowfallPoints = snowfallPoints
     }
 
     @MainActor
     convenience init() {
         let configuration = LiveDataConfiguration.fromBundle()
+        let snowfallConfiguration = SnowfallConfiguration.fromBundle()
+        let snowfallService = snowfallConfiguration.isEnabled ? SnowfallService() : nil
+        let snowfallPoints = SnowfallPoint.defaultPoints
+
         if configuration.useDotFeedsDirectly {
-            self.init(service: DotFeedsService(nevadaProxyBaseURL: configuration.nevadaProxyBaseURL))
+            self.init(
+                service: DotFeedsService(nevadaProxyBaseURL: configuration.nevadaProxyBaseURL),
+                snowfallService: snowfallService,
+                snowfallPoints: snowfallPoints
+            )
         } else {
-            self.init(service: CaltransKMLService())
+            self.init(
+                service: CaltransKMLService(),
+                snowfallService: snowfallService,
+                snowfallPoints: snowfallPoints
+            )
         }
     }
 
@@ -64,6 +81,10 @@ final class CorridorsViewModel: ObservableObject {
         if let snapshot = service.loadCachedSnapshot() {
             apply(snapshot: snapshot, isStale: true)
         }
+
+        if let snowfallService {
+            snowfallByPointId = snowfallService.cachedHistories()
+        }
     }
 
     private func refreshOnce() async {
@@ -78,6 +99,8 @@ final class CorridorsViewModel: ObservableObject {
             isStale = true
             lastErrorMessage = "Unable to refresh"
         }
+
+        await refreshSnowfallIfNeeded()
     }
 
     private func apply(snapshot: CorridorResponse, isStale: Bool) {
@@ -94,5 +117,44 @@ final class CorridorsViewModel: ObservableObject {
             self.isStale = true
         }
         lastErrorMessage = nil
+    }
+
+    private func refreshSnowfallIfNeeded() async {
+        guard let snowfallService else { return }
+        let updated = await snowfallService.refreshAllPointsIfNeeded(points: snowfallPoints)
+        snowfallByPointId = updated
+    }
+
+    var isSnowfallEnabled: Bool {
+        snowfallService != nil
+    }
+
+    var availableSnowfallPoints: [SnowfallPoint] {
+        snowfallPoints
+    }
+
+    func snowfallPoint(for corridorId: String) -> SnowfallPoint? {
+        SnowfallPoint.point(for: corridorId)
+    }
+
+    func snowfallHistory(for pointId: String) -> SnowfallHistory? {
+        snowfallByPointId[pointId]
+    }
+
+    func snowfallSummaryText(for corridorId: String) -> String? {
+        guard let point = snowfallPoint(for: corridorId) else {
+            return nil
+        }
+
+        guard let history = snowfallByPointId[point.id], history.days.count == 7 else {
+            return "Snow (7d): --"
+        }
+
+        return "Snow (7d): \(formatInches(history.total7DaysInches)) in"
+    }
+
+    func formatInches(_ value: Double) -> String {
+        let rounded = (value * 10).rounded() / 10
+        return String(format: "%.1f", rounded)
     }
 }

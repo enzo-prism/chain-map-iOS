@@ -20,6 +20,7 @@ currently fetches Caltrans CWWP2 JSON feeds directly.
 - `Features/Details`: bottom sheet with segment details and advisories.
 - `Features/Alerts`: notifications and watchlists (optional).
 - `Services/DotFeedsService`: fetch + normalize Caltrans CWWP2 feeds (chain + closures).
+- `Sources/Weather/SnowfallService`: fetch + cache Open-Meteo snowfall history.
 - `Services/Cache`: short-lived cache with explicit expiry.
 
 ## State management

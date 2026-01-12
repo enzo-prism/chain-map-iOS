@@ -28,6 +28,8 @@ Status: early prototype. The UI and data integrations are still being built.
   - Chain controls (D10): `https://cwwp2.dot.ca.gov/data/d10/cc/ccStatusD10.json`
   - Lane closures (D03): `https://cwwp2.dot.ca.gov/data/d3/lcs/lcsStatusD03.json`
   - Lane closures (D10): `https://cwwp2.dot.ca.gov/data/d10/lcs/lcsStatusD10.json`
+- The app fetches snowfall history from Open-Meteo:
+  - Snowfall history: `https://api.open-meteo.com/v1/forecast`
 - Chain controls refresh every 60 seconds; lane closures refresh every 5 minutes.
 - The app caches the last-known-good snapshot on-device.
 
