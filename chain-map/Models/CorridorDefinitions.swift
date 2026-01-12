@@ -10,6 +10,15 @@ struct CorridorDefinition: Identifiable {
 }
 
 extension CorridorDefinition {
+    static let keyPathIds: [String] = [
+        "i80-donner",
+        "us50-echo",
+        "ca88-carson",
+        "ca89-tahoe",
+        "ca28-laketahoe",
+        "ca267-kings"
+    ]
+
     static let all: [CorridorDefinition] = [
         CorridorDefinition(
             id: "i80-donner",

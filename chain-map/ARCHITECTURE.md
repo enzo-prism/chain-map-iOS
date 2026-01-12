@@ -11,7 +11,7 @@ The `/backend` service can ingest DOT data and expose a JSON API, but the iOS ap
 currently fetches Caltrans QuickMap KML directly.
 
 ## Layers
-- UI: SwiftUI views with lightweight view models.
+- UI: SwiftUI views with lightweight view models for the map and status list.
 - Domain: models for roads, chain control status, incidents, and regions.
 - Services: data fetching, parsing, caching, and freshness calculation.
 
@@ -25,6 +25,7 @@ currently fetches Caltrans QuickMap KML directly.
 ## State management
 - Use `ObservableObject` or `@Observable` for view models.
 - Use dependency injection via initializers; avoid global singletons.
+- Share a single `CorridorsViewModel` across tabs to avoid duplicate polling.
 - Keep asynchronous work in services; views should only render state.
 
 ## Map rendering

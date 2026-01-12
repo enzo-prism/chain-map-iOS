@@ -8,8 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = CorridorsViewModel()
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
-        CorridorsMapView()
+        TabView {
+            CorridorsMapView(viewModel: viewModel)
+                .tabItem {
+                    Label("Map", systemImage: AppSymbol.tabMap)
+                }
+
+            CorridorsListView(viewModel: viewModel)
+                .tabItem {
+                    Label("Status", systemImage: AppSymbol.tabStatus)
+                }
+        }
+        .onAppear {
+            viewModel.startPolling()
+        }
+        .onDisappear {
+            viewModel.stopPolling()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                viewModel.startPolling()
+            } else {
+                viewModel.stopPolling()
+            }
+        }
     }
 }
 

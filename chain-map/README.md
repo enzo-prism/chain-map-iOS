@@ -1,13 +1,15 @@
 # Chain Map
 
 Chain Map is an iOS app that surfaces live chain control requirements and winter
-road conditions for Tahoe and the Bay Area in a fast, glanceable map UI.
+road conditions for Tahoe and the Bay Area in a fast, glanceable map UI with a
+text-first status list.
 
 Status: early prototype. The UI and data integrations are still being built.
 
 ## Goals
 - Make chain control status easy to understand at a glance.
 - Highlight closures and restrictions without hiding the map.
+- Offer a text-first status view for key routes.
 - Keep data freshness explicit and avoid over-promising accuracy.
 
 ## Tech stack

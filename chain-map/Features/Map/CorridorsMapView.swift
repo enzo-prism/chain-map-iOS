@@ -2,8 +2,7 @@ import MapKit
 import SwiftUI
 
 struct CorridorsMapView: View {
-    @StateObject private var viewModel = CorridorsViewModel()
-    @Environment(\.scenePhase) private var scenePhase
+    @ObservedObject var viewModel: CorridorsViewModel
     @State private var isShowingAbout = false
     @State private var cameraPosition = MapCameraPosition.region(
         MKCoordinateRegion(
@@ -59,19 +58,6 @@ struct CorridorsMapView: View {
                 legendOverlay
             }
         }
-        .onAppear {
-            viewModel.startPolling()
-        }
-        .onDisappear {
-            viewModel.stopPolling()
-        }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active {
-                viewModel.startPolling()
-            } else {
-                viewModel.stopPolling()
-            }
-        }
     }
 
     private var statusOverlay: some View {
@@ -80,23 +66,27 @@ struct CorridorsMapView: View {
                 Text("Chain Map")
                     .font(.headline)
 
-                Button("Refresh") {
+                Button {
                     viewModel.manualRefresh()
+                } label: {
+                    Label("Refresh", systemImage: AppSymbol.refresh)
                 }
                 .font(.caption)
 
-                Button("About") {
+                Button {
                     isShowingAbout = true
+                } label: {
+                    Label("About", systemImage: AppSymbol.about)
                 }
                 .font(.caption)
             }
 
-            Text(lastUpdatedText)
+            Label(lastUpdatedText, systemImage: AppSymbol.lastUpdated)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
             if viewModel.isStale {
-                Text("Stale data")
+                Label("Stale data", systemImage: AppSymbol.stale)
                     .font(.caption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -149,10 +139,10 @@ struct CorridorsMapView: View {
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 10) {
-                legendItem(label: "Clear", color: color(for: .ok))
-                legendItem(label: "Caution", color: color(for: .caution))
-                legendItem(label: "Chains", color: color(for: .chains))
-                legendItem(label: "Closed", color: color(for: .closed))
+                legendItem(label: "Clear", symbol: AppSymbol.severitySymbol(for: .ok), color: color(for: .ok))
+                legendItem(label: "Caution", symbol: AppSymbol.severitySymbol(for: .caution), color: color(for: .caution))
+                legendItem(label: "Chains", symbol: AppSymbol.severitySymbol(for: .chains), color: color(for: .chains))
+                legendItem(label: "Closed", symbol: AppSymbol.severitySymbol(for: .closed), color: color(for: .closed))
             }
         }
         .padding(10)
@@ -161,11 +151,11 @@ struct CorridorsMapView: View {
         .padding(.leading, 16)
     }
 
-    private func legendItem(label: String, color: Color) -> some View {
+    private func legendItem(label: String, symbol: String, color: Color) -> some View {
         HStack(spacing: 6) {
-            RoundedRectangle(cornerRadius: 2)
-                .fill(color)
-                .frame(width: 14, height: 4)
+            Image(systemName: symbol)
+                .font(.caption2)
+                .foregroundStyle(color)
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -178,9 +168,8 @@ private struct AboutDataView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("About the data")
-                        .font(.title3)
-                        .bold()
+                    Label("About the data", systemImage: AppSymbol.dataSource)
+                        .font(.title3.weight(.semibold))
 
                     Text("Chain Map pulls live chain control data from Caltrans QuickMap. The app fetches the KML feed every few minutes and caches the last result on your device so it can still show something offline.")
 
@@ -205,5 +194,5 @@ private struct AboutDataView: View {
 }
 
 #Preview {
-    CorridorsMapView()
+    CorridorsMapView(viewModel: CorridorsViewModel())
 }

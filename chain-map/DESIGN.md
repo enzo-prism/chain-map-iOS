@@ -12,6 +12,7 @@ content legible while making chain control status immediately understandable.
 
 ## Layout
 - Full-bleed map as the base layer.
+- Tab bar switches between the map and a text-first status list.
 - Glass overlays for primary controls (search, filters, status chips).
 - Bottom sheet or compact panel for details and road segments.
 - Keep critical map content visible; overlays should float and avoid wide bars.
@@ -41,6 +42,12 @@ keep contrast strong.
 - Use SF Pro for all text (system default).
 - Status and location labels should be short and scannable.
 - Use dynamic type; avoid truncation in critical status labels.
+
+## Iconography (SF Symbols)
+- Use SF Symbols with text labels; avoid icon-only controls except tab items.
+- Prefer monochrome or hierarchical rendering; apply semantic colors only for status.
+- Keep symbols aligned to surrounding text size (caption icons near 12-14pt, buttons near 16-18pt).
+- Centralize symbol names in `UI/Iconography.swift` to keep usage consistent.
 
 ## Motion
 - Animate overlay entrances with a gentle scale + fade.
